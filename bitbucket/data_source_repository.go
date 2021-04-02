@@ -45,7 +45,10 @@ func dataSourceRepositoryRead(ctx context.Context, d *schema.ResourceData, m int
 		return diag.FromErr(err)
 	}
 
-	d.Set("name", repo.Name)
+	err = d.Set("name", repo.Name)
+	if err != nil {
+		return diag.FromErr(err)
+	}
 	d.SetId(repo.Uuid)
 
 	return diags

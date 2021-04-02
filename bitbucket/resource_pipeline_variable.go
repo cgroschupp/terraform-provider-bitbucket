@@ -73,11 +73,20 @@ func resourcePipelineVariableRead(ctx context.Context, d *schema.ResourceData, m
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("unable to read pipeline variabe: %s", err))
 	}
-	d.Set("key", pv.Key)
-	if !pv.Secured {
-		d.Set("value", pv.Value)
+	err = d.Set("key", pv.Key)
+	if err != nil {
+		return diag.FromErr(err)
 	}
-	d.Set("secured", pv.Secured)
+	if !pv.Secured {
+		err = d.Set("value", pv.Value)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+	}
+	err = d.Set("secured", pv.Secured)
+	if err != nil {
+		return diag.FromErr(err)
+	}
 	return diags
 }
 
@@ -92,7 +101,11 @@ func resourcePipelineVariableUpdate(ctx context.Context, d *schema.ResourceData,
 	secured := d.Get("secured").(bool)
 
 	data := &bb.RepositoryPipelineVariableOptions{Owner: workspace, RepoSlug: repoUuid, Uuid: d.Id(), Key: key, Value: value, Secured: secured}
-	c.Repositories.Repository.UpdatePipelineVariable(data)
+	_, err := c.Repositories.Repository.UpdatePipelineVariable(data)
+
+	if err != nil {
+		return diag.FromErr(err)
+	}
 	return diags
 }
 

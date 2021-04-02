@@ -3,7 +3,6 @@ package bitbucket
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
@@ -60,8 +59,14 @@ func resourceRepositoryRead(ctx context.Context, d *schema.ResourceData, m inter
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	d.Set("repo_slug", pv.Slug)
-	d.Set("description", pv.Description)
+	err = d.Set("repo_slug", pv.Slug)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	err = d.Set("description", pv.Description)
+	if err != nil {
+		return diag.FromErr(err)
+	}
 
 	return diags
 }
@@ -73,14 +78,16 @@ func resourceRepositoryUpdate(ctx context.Context, d *schema.ResourceData, m int
 	workspace := d.Get("workspace").(string)
 	slug := d.Get("repo_slug").(string)
 	description := d.Get("description").(string)
-	log.Printf("repo_slug: %s", slug)
 
 	data := &bb.RepositoryOptions{Owner: workspace, Uuid: d.Id(), RepoSlug: slug, Description: description}
 	repo, err := c.Repositories.Repository.Update(data)
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	d.Set("description", repo.Description)
+	err = d.Set("description", repo.Description)
+	if err != nil {
+		return diag.FromErr(err)
+	}
 	return diags
 }
 
