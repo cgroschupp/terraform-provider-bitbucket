@@ -28,7 +28,10 @@ func Provider() *schema.Provider {
 			"bitbucket_pipeline_variable": resourcePipelineVariable(),
 			"bitbucket_repository":        resourceRepository(),
 		},
-		DataSourcesMap:       map[string]*schema.Resource{"bitbucket_repository": dataSourceRepository()},
+		DataSourcesMap: map[string]*schema.Resource{
+			"bitbucket_repository": dataSourceRepository(),
+			"bitbucket_workspace":  dataSourceWorkspace(),
+		},
 		ConfigureContextFunc: providerConfigure,
 	}
 }
