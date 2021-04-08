@@ -25,10 +25,11 @@ func TestAccBitbucketBranchRestriction_Basic(t *testing.T) {
 				),
 			},
 			{
-				Config: testAccPipelineBranchRestrictionResource(kindUpdate),
+				Config: testAccPipelineBranchRestrictionValueResource(kindUpdate, 1),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("bitbucket_branch_restriction.foo", "kind", kindUpdate),
 					resource.TestCheckResourceAttr("bitbucket_branch_restriction.foo", "workspace", bitbucketWorkspace),
+					resource.TestCheckResourceAttr("bitbucket_branch_restriction.foo", "value", "1"),
 				),
 			},
 		},
@@ -49,4 +50,21 @@ resource "bitbucket_branch_restriction" "foo" {
 	pattern     = "master"
   }
 `, bitbucketWorkspace, kind)
+}
+
+func testAccPipelineBranchRestrictionValueResource(kind string, value int) string {
+	return fmt.Sprintf(`
+resource "bitbucket_repository" "foo" {
+  workspace   = "%s"
+  name        = "unittest"
+  description = "unittest"  
+}
+resource "bitbucket_branch_restriction" "foo" {
+	workspace  = bitbucket_repository.foo.workspace
+	repository = bitbucket_repository.foo.id
+	kind        = "%s"
+	pattern     = "master"
+	value       = %d
+  }
+`, bitbucketWorkspace, kind, value)
 }
