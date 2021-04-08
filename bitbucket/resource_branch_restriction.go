@@ -36,6 +36,7 @@ func resourceBranchRestriction() *schema.Resource {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringInSlice([]string{"require_tasks_to_be_completed", "force", "restrict_merges", "enforce_merge_checks", "reset_pullrequest_changes_requested_on_change", "require_approvals_to_merge", "allow_auto_merge_when_builds_pass", "delete", "require_all_dependencies_merged", "require_no_changes_requested", "push", "require_passing_builds_to_merge", "reset_pullrequest_approvals_on_change", "require_default_reviewer_approvals_to_merge"}, false),
+				ForceNew:     true,
 			},
 			"value": {
 				Type:     schema.TypeInt,
@@ -54,8 +55,8 @@ func resourceBranchRestrictionCreate(ctx context.Context, d *schema.ResourceData
 	kind := d.Get("kind").(string)
 	pattern := d.Get("pattern").(string)
 	var value *int
-	if v, ok := d.Get("value").(*int); !ok {
-		value = v
+	if v, _ := d.Get("value").(int); v != 0 {
+		value = &v
 	}
 
 	branchRestriction, err := c.Repositories.BranchRestrictions.Create(&bb.BranchRestrictionsOptions{RepoSlug: repo, Owner: workspace, Kind: kind, Pattern: pattern, Value: value})
