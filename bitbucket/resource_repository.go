@@ -18,20 +18,25 @@ func resourceRepository() *schema.Resource {
 		UpdateContext: resourceRepositoryUpdate,
 		DeleteContext: resourceRepositoryDelete,
 		Schema: map[string]*schema.Schema{
+			"id": {
+				Description: "The ID of the repository.",
+				Type:        schema.TypeString,
+				Computed:    true,
+			},
 			"name": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "The name of the repository",
+				Description: "The name of the repository.",
 			},
 			"workspace": {
 				Type:        schema.TypeString,
 				Required:    true,
-				Description: "The name of the workspace where the repository is created",
+				Description: "The name of the workspace where the repository is created.",
 			},
 			"description": {
 				Type:        schema.TypeString,
 				Optional:    true,
-				Description: "The description of the repository",
+				Description: "The description of the repository.",
 			},
 		},
 	}

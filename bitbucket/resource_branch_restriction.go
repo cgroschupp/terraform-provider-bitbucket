@@ -13,34 +13,45 @@ import (
 
 func resourceBranchRestriction() *schema.Resource {
 	return &schema.Resource{
+		Description:   "`bitbucket_branch_restriction` manages a branch restriction rule for a repository.",
 		CreateContext: resourceBranchRestrictionCreate,
 		ReadContext:   resourceBranchRestrictionRead,
 		UpdateContext: resourceBranchRestrictionUpdate,
 		DeleteContext: resourceBranchRestrictionDelete,
 		Schema: map[string]*schema.Schema{
+			"id": {
+				Description: "The ID of the branch restriction.",
+				Type:        schema.TypeString,
+				Computed:    true,
+			},
 			"repository": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: "This can either be the repository slug or the UUID of the repository.",
 			},
 			"workspace": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: "This can either be the workspace ID (slug) or the workspace UUID.",
 			},
 			"pattern": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "Branch restrictions applied to branches of this pattern.",
 			},
 			"kind": {
 				Type:         schema.TypeString,
 				Required:     true,
 				ValidateFunc: validation.StringInSlice([]string{"require_tasks_to_be_completed", "force", "restrict_merges", "enforce_merge_checks", "reset_pullrequest_changes_requested_on_change", "require_approvals_to_merge", "allow_auto_merge_when_builds_pass", "delete", "require_all_dependencies_merged", "require_no_changes_requested", "push", "require_passing_builds_to_merge", "reset_pullrequest_approvals_on_change", "require_default_reviewer_approvals_to_merge"}, false),
 				ForceNew:     true,
+				Description:  "Branch restrictions of this type.",
 			},
 			"value": {
-				Type:     schema.TypeInt,
-				Optional: true,
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Description: "Value with kind-specific semantics: `require_approvals_to_merge` uses it to require a minimum number of approvals on a PR; `require_default_reviewer_approvals_to_merge` uses it to require a minimum number of approvals from default reviewers on a PR; `require_passing_builds_to_merge` uses it to require a minimum number of passing builds.",
 			},
 		},
 	}

@@ -29,12 +29,15 @@ resource "bitbucket_repository" "repo" {
 
 ### Required
 
-- **name** (String) The name of the repository
-- **workspace** (String) The name of the workspace where the repository is created
+- **name** (String) The name of the repository.
+- **workspace** (String) The name of the workspace where the repository is created.
 
 ### Optional
 
-- **description** (String) The description of the repository
-- **id** (String) The ID of this resource.
+- **description** (String) The description of the repository.
+
+### Read-Only
+
+- **id** (String) The ID of the repository.
 
 

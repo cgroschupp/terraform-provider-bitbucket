@@ -10,11 +10,13 @@ import (
 
 func dataSourceWorkspace() *schema.Resource {
 	return &schema.Resource{
+		Description: "`bitbucket_workspace` data source can be used to retrieve the UUID for a workspace by name.",
 		ReadContext: dataSourceWorkspaceRead,
 		Schema: map[string]*schema.Schema{
 			"name": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "The name of the workspace.",
 			},
 		},
 	}

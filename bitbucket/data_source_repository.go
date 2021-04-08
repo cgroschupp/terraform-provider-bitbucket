@@ -10,19 +10,23 @@ import (
 
 func dataSourceRepository() *schema.Resource {
 	return &schema.Resource{
+		Description: "`bitbucket_repository` data source can be used to retrieve the UUID for a reposistory by name and workspace.",
 		ReadContext: dataSourceRepositoryRead,
 		Schema: map[string]*schema.Schema{
 			"id": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Computed:    true,
+				Description: "The ID of the repository.",
 			},
 			"workspace": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "The Workspace of the repository.",
 			},
 			"name": {
-				Type:     schema.TypeString,
-				Computed: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "The name of the repository.",
 			},
 		},
 	}

@@ -11,33 +11,44 @@ import (
 
 func resourcePipelineVariable() *schema.Resource {
 	return &schema.Resource{
+		Description:   "bitbucket_pipeline_variable` manages a bitbucket pipeline variable.",
 		CreateContext: resourcePipelineVariableCreate,
 		ReadContext:   resourcePipelineVariableRead,
 		UpdateContext: resourcePipelineVariableUpdate,
 		DeleteContext: resourcePipelineVariableDelete,
 		Schema: map[string]*schema.Schema{
+			"id": {
+				Description: "The ID of the pipeline variable.",
+				Type:        schema.TypeString,
+				Computed:    true,
+			},
 			"repository": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: "This can either be the repository slug or the UUID of the repository.",
 			},
 			"workspace": {
-				Type:     schema.TypeString,
-				Required: true,
-				ForceNew: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				ForceNew:    true,
+				Description: "This can either be the workspace ID (slug) or the workspace UUID.",
 			},
 			"key": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "The unique name of the variable.",
 			},
 			"value": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "The value of the variable. If the variable is secured, this will be empty.",
 			},
 			"secured": {
-				Type:     schema.TypeBool,
-				Default:  false,
-				Optional: true,
+				Type:        schema.TypeBool,
+				Default:     false,
+				Optional:    true,
+				Description: "If true, this variable will be treated as secured. The value will never be exposed in the logs or the REST API.",
 			},
 		},
 	}
