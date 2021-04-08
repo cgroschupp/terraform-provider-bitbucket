@@ -11,22 +11,27 @@ import (
 
 func resourceRepository() *schema.Resource {
 	return &schema.Resource{
+		Description: "`bitbucket_repository` manages a bitbucket repository.",
+
 		CreateContext: resourceRepositoryCreate,
 		ReadContext:   resourceRepositoryRead,
 		UpdateContext: resourceRepositoryUpdate,
 		DeleteContext: resourceRepositoryDelete,
 		Schema: map[string]*schema.Schema{
 			"name": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "The name of the repository",
 			},
 			"workspace": {
-				Type:     schema.TypeString,
-				Required: true,
+				Type:        schema.TypeString,
+				Required:    true,
+				Description: "The name of the workspace where the repository is created",
 			},
 			"description": {
-				Type:     schema.TypeString,
-				Optional: true,
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "The description of the repository",
 			},
 		},
 	}
