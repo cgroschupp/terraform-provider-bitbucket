@@ -3,7 +3,6 @@ package bitbucket
 import (
 	"context"
 	"fmt"
-	"log"
 	"strconv"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -75,11 +74,25 @@ func resourceBranchRestrictionRead(ctx context.Context, d *schema.ResourceData, 
 	var diags diag.Diagnostics
 	workspace := d.Get("workspace").(string)
 	repo := d.Get("repository").(string)
-	pv, err := c.Repositories.BranchRestrictions.Get(&bb.BranchRestrictionsOptions{Owner: workspace, RepoSlug: repo, ID: d.Id()})
+	br, err := c.Repositories.BranchRestrictions.Get(&bb.BranchRestrictionsOptions{Owner: workspace, RepoSlug: repo, ID: d.Id()})
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	log.Printf("[DEBUG] branch restrict %s", pv)
+	err = d.Set("pattern", br.Pattern)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+	err = d.Set("kind", br.Kind)
+	if err != nil {
+		return diag.FromErr(err)
+	}
+
+	if br.Value != nil {
+		err = d.Set("value", br.Value)
+		if err != nil {
+			return diag.FromErr(err)
+		}
+	}
 
 	return diags
 }
