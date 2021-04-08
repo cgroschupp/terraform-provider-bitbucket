@@ -16,12 +16,16 @@ func Provider() *schema.Provider {
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("BITBUCKET_USERNAME", nil),
+				Description: "Local user name for the bitbucket API. Can be specified with the `BITBUCKET_USERNAME` " +
+					"environment variable.",
 			},
 			"password": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				Sensitive:   true,
 				DefaultFunc: schema.EnvDefaultFunc("BITBUCKET_PASSWORD", nil),
+				Description: "Password for the user accessing the API. Can be specified with the `BITBUCKET_PASSWORD` " +
+					"environment variable.",
 			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
