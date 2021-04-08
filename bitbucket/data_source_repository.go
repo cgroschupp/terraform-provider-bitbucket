@@ -16,10 +16,6 @@ func dataSourceRepository() *schema.Resource {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"repo_slug": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
 			"workspace": {
 				Type:     schema.TypeString,
 				Required: true,
@@ -38,17 +34,13 @@ func dataSourceRepositoryRead(ctx context.Context, d *schema.ResourceData, m int
 	var diags diag.Diagnostics
 
 	workspace := d.Get("workspace").(string)
-	slug := d.Get("repo_slug").(string)
-	repo, err := c.Repositories.Repository.Get(&bb.RepositoryOptions{Owner: workspace, RepoSlug: slug})
+	name := d.Get("name").(string)
+	repo, err := c.Repositories.Repository.Get(&bb.RepositoryOptions{Owner: workspace, RepoSlug: name})
 
 	if err != nil {
 		return diag.FromErr(err)
 	}
 
-	err = d.Set("name", repo.Name)
-	if err != nil {
-		return diag.FromErr(err)
-	}
 	d.SetId(repo.Uuid)
 
 	return diags

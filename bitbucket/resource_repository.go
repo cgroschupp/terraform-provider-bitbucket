@@ -16,7 +16,7 @@ func resourceRepository() *schema.Resource {
 		UpdateContext: resourceRepositoryUpdate,
 		DeleteContext: resourceRepositoryDelete,
 		Schema: map[string]*schema.Schema{
-			"repo_slug": {
+			"name": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
@@ -37,10 +37,10 @@ func resourceRepositoryCreate(ctx context.Context, d *schema.ResourceData, m int
 
 	var diags diag.Diagnostics
 	workspace := d.Get("workspace").(string)
-	slug := d.Get("repo_slug").(string)
+	name := d.Get("name").(string)
 	description := d.Get("description").(string)
 
-	repo, err := c.Repositories.Repository.Create(&bb.RepositoryOptions{Owner: workspace, RepoSlug: slug, Description: description})
+	repo, err := c.Repositories.Repository.Create(&bb.RepositoryOptions{Owner: workspace, RepoSlug: name, Description: description})
 
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("unable to create repo: %s", err))
@@ -59,7 +59,7 @@ func resourceRepositoryRead(ctx context.Context, d *schema.ResourceData, m inter
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	err = d.Set("repo_slug", pv.Slug)
+	err = d.Set("name", pv.Name)
 	if err != nil {
 		return diag.FromErr(err)
 	}
@@ -76,10 +76,10 @@ func resourceRepositoryUpdate(ctx context.Context, d *schema.ResourceData, m int
 
 	var diags diag.Diagnostics
 	workspace := d.Get("workspace").(string)
-	slug := d.Get("repo_slug").(string)
+	name := d.Get("name").(string)
 	description := d.Get("description").(string)
 
-	data := &bb.RepositoryOptions{Owner: workspace, Uuid: d.Id(), RepoSlug: slug, Description: description}
+	data := &bb.RepositoryOptions{Owner: workspace, Uuid: d.Id(), RepoSlug: name, Description: description}
 	repo, err := c.Repositories.Repository.Update(data)
 	if err != nil {
 		return diag.FromErr(err)

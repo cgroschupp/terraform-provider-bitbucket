@@ -16,7 +16,7 @@ func resourcePipelineVariable() *schema.Resource {
 		UpdateContext: resourcePipelineVariableUpdate,
 		DeleteContext: resourcePipelineVariableDelete,
 		Schema: map[string]*schema.Schema{
-			"repo_uuid": {
+			"repository": {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
@@ -48,12 +48,12 @@ func resourcePipelineVariableCreate(ctx context.Context, d *schema.ResourceData,
 
 	var diags diag.Diagnostics
 	workspace := d.Get("workspace").(string)
-	repoUuid := d.Get("repo_uuid").(string)
+	repo := d.Get("repository").(string)
 	key := d.Get("key").(string)
 	value := d.Get("value").(string)
 	secured := d.Get("secured").(bool)
 
-	pv, err := c.Repositories.Repository.AddPipelineVariable(&bb.RepositoryPipelineVariableOptions{RepoSlug: repoUuid, Owner: workspace, Key: key, Value: value, Secured: secured})
+	pv, err := c.Repositories.Repository.AddPipelineVariable(&bb.RepositoryPipelineVariableOptions{RepoSlug: repo, Owner: workspace, Key: key, Value: value, Secured: secured})
 
 	if err != nil {
 		return diag.FromErr(err)
@@ -68,8 +68,8 @@ func resourcePipelineVariableRead(ctx context.Context, d *schema.ResourceData, m
 
 	var diags diag.Diagnostics
 	workspace := d.Get("workspace").(string)
-	repoUuid := d.Get("repo_uuid").(string)
-	pv, err := c.Repositories.Repository.GetPipelineVariable(&bb.RepositoryPipelineVariableOptions{Owner: workspace, RepoSlug: repoUuid, Uuid: d.Id()})
+	repo := d.Get("repository").(string)
+	pv, err := c.Repositories.Repository.GetPipelineVariable(&bb.RepositoryPipelineVariableOptions{Owner: workspace, RepoSlug: repo, Uuid: d.Id()})
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("unable to read pipeline variabe: %s", err))
 	}
@@ -95,12 +95,12 @@ func resourcePipelineVariableUpdate(ctx context.Context, d *schema.ResourceData,
 
 	var diags diag.Diagnostics
 	workspace := d.Get("workspace").(string)
-	repoUuid := d.Get("repo_uuid").(string)
+	repo := d.Get("repository").(string)
 	key := d.Get("key").(string)
 	value := d.Get("value").(string)
 	secured := d.Get("secured").(bool)
 
-	data := &bb.RepositoryPipelineVariableOptions{Owner: workspace, RepoSlug: repoUuid, Uuid: d.Id(), Key: key, Value: value, Secured: secured}
+	data := &bb.RepositoryPipelineVariableOptions{Owner: workspace, RepoSlug: repo, Uuid: d.Id(), Key: key, Value: value, Secured: secured}
 	_, err := c.Repositories.Repository.UpdatePipelineVariable(data)
 
 	if err != nil {
@@ -114,9 +114,9 @@ func resourcePipelineVariableDelete(ctx context.Context, d *schema.ResourceData,
 
 	var diags diag.Diagnostics
 	workspace := d.Get("workspace").(string)
-	repoUuid := d.Get("repo_uuid").(string)
+	repo := d.Get("repository").(string)
 
-	_, err := c.Repositories.Repository.DeletePipelineVariable(&bb.RepositoryPipelineVariableDeleteOptions{Owner: workspace, RepoSlug: repoUuid, Uuid: d.Id()})
+	_, err := c.Repositories.Repository.DeletePipelineVariable(&bb.RepositoryPipelineVariableDeleteOptions{Owner: workspace, RepoSlug: repo, Uuid: d.Id()})
 	if err != nil {
 		return diag.FromErr(err)
 	}

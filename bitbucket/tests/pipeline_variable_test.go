@@ -22,14 +22,14 @@ func TestAccBitbucketPipelineVariable_Basic(t *testing.T) {
 				Config: testAccPipelineVariableResource(value, key),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("bitbucket_pipeline_variable.foo", "key", key),
-					resource.TestCheckResourceAttr("bitbucket_pipeline_variable.foo", "workspace", "cgroschupp"),
+					resource.TestCheckResourceAttr("bitbucket_pipeline_variable.foo", "workspace", bitbucketWorkspace),
 				),
 			},
 			{
 				Config: testAccPipelineVariableResource(value, keyUpdate),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("bitbucket_pipeline_variable.foo", "key", keyUpdate),
-					resource.TestCheckResourceAttr("bitbucket_pipeline_variable.foo", "workspace", "cgroschupp"),
+					resource.TestCheckResourceAttr("bitbucket_pipeline_variable.foo", "workspace", bitbucketWorkspace),
 				),
 			},
 		},
@@ -40,15 +40,15 @@ func testAccPipelineVariableResource(value, key string) string {
 	return fmt.Sprintf(`
 resource "bitbucket_repository" "foo" {
   workspace   = "%s"
-  repo_slug   = "unittest"
+  name        = "unittest"
   description = "unittest"  
 }
 resource "bitbucket_pipeline_variable" "foo" {
-	workspace = bitbucket_repository.foo.workspace
-	repo_uuid = bitbucket_repository.foo.id
-	key       = "%s"
-	value     = "%s"
-	secured   = false
+	workspace  = bitbucket_repository.foo.workspace
+	repository = bitbucket_repository.foo.id
+	key        = "%s"
+	value      = "%s"
+	secured    = false
   }
 `, bitbucketWorkspace, key, value)
 }

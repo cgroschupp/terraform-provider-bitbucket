@@ -7,16 +7,21 @@ terraform {
   }
 }
 
-provider "bitbucket" {}
+provider "bitbucket" {
+
+}
+data "bitbucket_workspace" "workspace" {
+  name = "cgroschupp"
+}
 
 resource "bitbucket_repository" "repo" {
-  workspace   = "cgroschupp"
-  repo_slug   = "test"
+  workspace   = data.bitbucket_workspace.workspace.id
+  name        = "test"
   description = "test"
 }
 
 output "repo_name" {
-  value = bitbucket_repository.repo.repo_slug
+  value = bitbucket_repository.repo.name
 }
 
 output "repo_id" {
@@ -24,9 +29,16 @@ output "repo_id" {
 }
 
 resource "bitbucket_pipeline_variable" "var" {
-  workspace = bitbucket_repository.repo.workspace
-  repo_uuid = bitbucket_repository.repo.id
-  key       = "var"
-  value     = "var_value"
-  secured   = false
+  workspace  = bitbucket_repository.repo.workspace
+  repository = bitbucket_repository.repo.id
+  key        = "var"
+  value      = "var_value"
+  secured    = false
+}
+
+resource "bitbucket_branch_restriction" "var" {
+  workspace  = bitbucket_repository.repo.workspace
+  repository = bitbucket_repository.repo.id
+  kind       = "force"
+  pattern    = "master1"
 }

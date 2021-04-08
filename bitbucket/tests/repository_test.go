@@ -22,16 +22,16 @@ func TestAccBitbucketRepo_Basic(t *testing.T) {
 				Config: testAccBitbucketRepositoryResource(repoSlug, description),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("bitbucket_repository.foo", "description", description),
-					resource.TestCheckResourceAttr("bitbucket_repository.foo", "repo_slug", repoSlug),
-					resource.TestCheckResourceAttr("bitbucket_repository.foo", "workspace", "cgroschupp"),
+					resource.TestCheckResourceAttr("bitbucket_repository.foo", "name", repoSlug),
+					resource.TestCheckResourceAttr("bitbucket_repository.foo", "workspace", bitbucketWorkspace),
 				),
 			},
 			{
 				Config: testAccBitbucketRepositoryResource(repoSlugUpdated, description),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr("bitbucket_repository.foo", "description", description),
-					resource.TestCheckResourceAttr("bitbucket_repository.foo", "repo_slug", repoSlugUpdated),
-					resource.TestCheckResourceAttr("bitbucket_repository.foo", "workspace", "cgroschupp"),
+					resource.TestCheckResourceAttr("bitbucket_repository.foo", "name", repoSlugUpdated),
+					resource.TestCheckResourceAttr("bitbucket_repository.foo", "workspace", bitbucketWorkspace),
 				),
 			},
 		},
@@ -42,7 +42,7 @@ func testAccBitbucketRepositoryResource(name, description string) string {
 	return fmt.Sprintf(`
 resource "bitbucket_repository" "foo" {
   workspace   = "%s"
-  repo_slug   = "%s"
+  name        = "%s"
   description = "%s"  
 }`, bitbucketWorkspace, name, description)
 }
