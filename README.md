@@ -1,21 +1,18 @@
-# Terraform Provider Bitbucket
+# Bitbucket Terraform Provider (terraform-provider-bitbucket)
 
-Run the following command to build the provider
+## Documentation
 
-```shell
-go build -o terraform-provider-bitbucket
-```
+You can browse documentation on the [Terraform provider registry](https://registry.terraform.io/providers/cgroschupp/bitbucket/latest/docs).
 
-## Test sample configuration
 
-First, build and install the provider.
+## Using the Provider
 
-```shell
-make install
-```
+### Terraform 0.13 and above
 
-Then, run the following command to initialize the workspace and apply the sample configuration.
+You can use the provider via the [Terraform provider registry](https://registry.terraform.io/providers/cgroschupp/bitbucket).
 
-```shell
-terraform init && terraform apply
-```
+### Terraform 0.12 or manual installation
+
+You can download a pre-built binary from the [releases](https://github.com/cgroschupp/terraform-provider-bitbucket/releases) page, these are built using [goreleaser](https://goreleaser.com/) (the [configuration](.goreleaser.yml) is in the repo).
+
+If you want to build from source, you can simply use `go build` in the root of the repository.
