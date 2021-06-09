@@ -33,6 +33,7 @@ func Provider() *schema.Provider {
 			"bitbucket_repository":         resourceRepository(),
 			"bitbucket_branch_restriction": resourceBranchRestriction(),
 			"bitbucket_project":            resourceProject(),
+			"bitbucket_default_reviewer":   resourceDefaultReviewer(),
 		},
 		DataSourcesMap: map[string]*schema.Resource{
 			"bitbucket_repository": dataSourceRepository(),
