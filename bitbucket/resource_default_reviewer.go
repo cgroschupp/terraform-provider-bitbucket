@@ -51,12 +51,12 @@ func resourceDefaultReviewerCreate(ctx context.Context, d *schema.ResourceData, 
 	repo := d.Get("repository").(string)
 	user := d.Get("user").(string)
 
-	defaultReviewer, err := c.Repositories.Repository.AddDefaultReviewer(&bb.RepositoryDefaultReviewerOptions{RepoSlug: repo, Owner: workspace, Username: user})
+	_, err := c.Repositories.Repository.AddDefaultReviewer(&bb.RepositoryDefaultReviewerOptions{RepoSlug: repo, Owner: workspace, Username: user})
 
 	if err != nil {
 		return diag.FromErr(fmt.Errorf("unable to add default reviewer: %s", err))
 	}
-	d.SetId(defaultReviewer.Uuid)
+	d.SetId(fmt.Sprintf("%s-%s-%s", workspace, repo, user))
 
 	return diags
 }
