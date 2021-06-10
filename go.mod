@@ -2,6 +2,8 @@ module github.com/cgroschupp/terraform-provider-bitbucket
 
 go 1.16
 
+replace github.com/ktrysmt/go-bitbucket => github.com/cgroschupp/go-bitbucket v0.9.9-0.20210610105935-7abc9acd00e4
+
 require (
 	github.com/apparentlymart/go-cidr v1.1.0 // indirect
 	github.com/aws/aws-sdk-go v1.37.0 // indirect
