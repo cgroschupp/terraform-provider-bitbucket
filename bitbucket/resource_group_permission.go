@@ -82,7 +82,10 @@ func resourceGroupPermissionRead(ctx context.Context, d *schema.ResourceData, m 
 	if err != nil {
 		return diag.FromErr(err)
 	}
-	d.Set("permission", data[0].Privilege)
+	err = d.Set("permission", data[0].Privilege)
+	if err != nil {
+		return diag.FromErr(err)
+	}
 
 	return diags
 }
