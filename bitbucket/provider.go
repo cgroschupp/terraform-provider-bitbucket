@@ -27,6 +27,22 @@ func Provider() *schema.Provider {
 				Description: "Password for the user accessing the API. Can be specified with the `BITBUCKET_PASSWORD` " +
 					"environment variable.",
 			},
+			"client_id": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Sensitive:   true,
+				DefaultFunc: schema.EnvDefaultFunc("BITBUCKET_CLIENT_ID", nil),
+				Description: "Client ID for the app accessing the API. Can be specified with the `BITBUCKET_CLIENT_ID` " +
+					"environment variable.",
+			},
+			"client_secret": {
+				Type:        schema.TypeString,
+				Optional:    true,
+				Sensitive:   true,
+				DefaultFunc: schema.EnvDefaultFunc("BITBUCKET_CLIENT_SECRET", nil),
+				Description: "Client Secret for the app accessing the API. Can be specified with the `BITBUCKET_CLIENT_SECRET` " +
+					"environment variable.",
+			},
 		},
 		ResourcesMap: map[string]*schema.Resource{
 			"bitbucket_pipeline_variable":  resourcePipelineVariable(),
@@ -54,6 +70,13 @@ func providerConfigure(ctx context.Context, d *schema.ResourceData) (interface{}
 	if (username != "") && (password != "") {
 		c := bb.NewBasicAuth(username, password)
 
+		return c, diags
+	}
+	clientId := d.Get("client_id").(string)
+	clientSecret := d.Get("client_secret").(string)
+
+	if (clientId != "") && (clientSecret != "")  {
+		c := bb.NewOAuthClientCredentials(clientId, clientSecret)
 		return c, diags
 	}
 
