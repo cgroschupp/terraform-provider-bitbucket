@@ -1,4 +1,4 @@
 data "bitbucket_repository" "repository" {
-  repository = "bitbucket-repository"
+  name = "bitbucket-repository"
   workspace  = "bitbucket-workspace"
 }
